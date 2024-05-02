@@ -12,5 +12,14 @@ class HakiSpider(scrapy.Spider):
 
     def parse(self, response):
         yield {
-            "users": response.xpath(".//h2[span[re:test(@id, '_Haki_Users$')]]/following-sibling::table[1]//td/a/@title").getall()
+            "users": response.xpath("""
+                .//h2[span[re:test(@id, '_Haki_Users$')]]
+                /following-sibling::table[1]
+            """).xpath("""
+                set:difference(
+                    .//td/a[not(.//sup[@title='Non-Canon'])],
+                    ./tbody/tr[.//span[contains(., 'Non-Canon')]]
+                    /following-sibling::tr//a
+                )/@title
+            """).getall()
         }
