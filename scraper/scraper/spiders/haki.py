@@ -12,6 +12,7 @@ class HakiSpider(scrapy.Spider):
 
     def parse(self, response: scrapy.http.Response):
         yield {
+            "type": response.url.split("/")[-1].split("_")[0],
             "users": response.xpath("""
                 .//h2[span[re:test(@id, '_Haki_Users$')]]
                 /following-sibling::table[1]
