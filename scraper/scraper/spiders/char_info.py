@@ -63,4 +63,4 @@ class CharInfoSpider(scrapy.Spider):
         try:
             return int(re.search(r"(\d+)", text).group(1).replace(",", ""))
         except AttributeError:
-            return None
+            return 0
