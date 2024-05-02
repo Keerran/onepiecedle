@@ -10,7 +10,7 @@ class HakiSpider(scrapy.Spider):
         "https://onepiece.fandom.com/wiki/Haki/Busoshoku_Haki",
     ]
 
-    def parse(self, response):
+    def parse(self, response: scrapy.http.Response):
         yield {
             "users": response.xpath("""
                 .//h2[span[re:test(@id, '_Haki_Users$')]]

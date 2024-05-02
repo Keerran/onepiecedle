@@ -12,7 +12,7 @@ class CharInfoSpider(scrapy.Spider):
         for href in response.css(selector):
             yield response.follow(href, callback=self.parse_char)
 
-    def parse_char(self, response):
+    def parse_char(self, response: scrapy.http.Response):
         def extract(query: str):
             return re.sub(r"\[\d+\]", "", "".join(response.css(query).getall()).strip())
 
