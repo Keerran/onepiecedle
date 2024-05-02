@@ -53,7 +53,7 @@ class CharInfoSpider(scrapy.Spider):
         return affiliations[0] if len(affiliations) > 0 else None
 
     def parse_aliases(self, text: str):
-        return [re.match(r'"([^"]+)"', alias.strip()).group(1) for alias in text.split(";") if alias]
+        return [re.sub(r"\(.*\)", "", alias).strip().strip('"') for alias in text.split(";") if alias]
 
     def parse_height(self, text: str):
         try:
