@@ -32,7 +32,9 @@ class CharInfoSpider(scrapy.Spider):
         }
 
     def parse_debut(self, text: str):
-        chapter = int(re.search(r"Chapter (\d+)", text).group(1))
+        chapter = re.search(r"Chapter (\d+)", text)
+        if chapter is not None:
+            chapter = int(chapter.group(1))
         episode = re.search(r"Episode (\d+)", text)
         if episode is not None:
             episode = int(episode.group(1))
