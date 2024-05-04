@@ -24,7 +24,7 @@ class CharInfoSpider(scrapy.Spider):
             return
         yield {
             "name": name,
-            "debut": self.parse_debut(extract_aside("first")),
+            **self.parse_debut(extract_aside("first")),
             "affiliation": self.parse_affiliations(extract_aside("affiliation")),
             "origin": re.sub(r"\(.+\)", "", extract_aside("origin")),
             "aliases": self.parse_aliases(extract_aside("alias")) + self.parse_aliases(extract_aside("epithet")),
@@ -43,8 +43,8 @@ class CharInfoSpider(scrapy.Spider):
             episode = int(episode.group(1))
 
         return {
-            "chapter": chapter,
-            "episode": episode,
+            "anime_debut": chapter,
+            "manga_debut": episode,
         }
 
     def parse_affiliations(self, text: str):
