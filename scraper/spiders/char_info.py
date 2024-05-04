@@ -19,8 +19,11 @@ class CharInfoSpider(scrapy.Spider):
         def extract_aside(source: str, subquery=" div"):
             return extract(f'aside [data-source="{source}"]{subquery} *::text')
 
+        name = extract_aside("name", subquery="")
+        if not name:
+            return
         yield {
-            "name": extract_aside("name", subquery=""),
+            "name": name,
             "debut": self.parse_debut(extract_aside("first")),
             "affiliation": self.parse_affiliations(extract_aside("affiliation")),
             "origin": re.sub(r"\(.+\)", "", extract_aside("origin")),
