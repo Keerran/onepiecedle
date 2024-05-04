@@ -14,6 +14,10 @@ def main():
 
         chars[row["type"].lower()] = chars["name"].isin(users)
 
+    files = chars["name"].apply(lambda name: f"File:{name.replace(' ', '_')}_Portrait.png")
+
+    print(len("|".join(files)))
+
     chars.to_csv("../full.csv", index=False)
 
 
