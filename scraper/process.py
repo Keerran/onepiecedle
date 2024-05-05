@@ -51,5 +51,17 @@ def main():
     chars.to_csv("../full.csv", index=False)
 
 
+def validate():
+    chars = pd.read_csv("../full.csv")
+    missing = set(chars[
+        chars["image"].isna()
+        | chars["manga_debut"].isna()
+    ]["name"])
+
+    with open("../missing.txt", "w") as f:
+        f.write("\n".join(missing))
+
+
 if __name__ == "__main__":
     main()
+    validate()
