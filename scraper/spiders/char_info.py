@@ -56,7 +56,7 @@ class CharInfoSpider(scrapy.Spider):
         affiliations = [
             affiliation.strip()
             for affiliation in text.split(";")
-            if "(" not in affiliation
+            if re.match(r"\bformer\b", affiliation) is None
         ]
         return affiliations[0] if len(affiliations) > 0 else None
 
