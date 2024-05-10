@@ -65,8 +65,8 @@ class CharInfoSpider(scrapy.Spider):
 
     def parse_height(self, text: str):
         try:
-            return int(re.search(r"(?s:.*)(\d+) ?cm", text).group(1))
-        except AttributeError:
+            return int(re.findall(r"(\d+) ?cm", text)[-1])
+        except IndexError:
             return None
 
     def parse_bounty(self, text: str):
