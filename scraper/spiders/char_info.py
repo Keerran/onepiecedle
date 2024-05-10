@@ -14,10 +14,15 @@ class CharInfoSpider(scrapy.Spider):
 
     def parse_char(self, response: scrapy.http.Response):
         def extract(query: str):
-            return re.sub(r"\[\d+\]", "", "".join(response.css(query).getall()).strip())
+            return "".join(response.xpath(f"""
+                set:difference(
+                    {query},
+                    //sup//text() | //s//text()
+                )
+            """).getall()).strip()
 
-        def extract_aside(source: str, subquery=" div"):
-            return extract(f'aside [data-source="{source}"]{subquery} *::text')
+        def extract_aside(source: str, subquery="//div"):
+            return extract(f'//aside//*[@data-source="{source}"]{subquery}//text()')
 
         name = extract_aside("name", subquery="")
         if not name:
