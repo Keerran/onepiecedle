@@ -71,6 +71,6 @@ class CharInfoSpider(scrapy.Spider):
 
     def parse_bounty(self, text: str):
         try:
-            return int(re.search(r"([\d,]+)", text).group(1).replace(",", ""))
+            return int(re.search(r"^([\d,]+)", text).group(1).replace(",", ""))
         except AttributeError:
             return 0
