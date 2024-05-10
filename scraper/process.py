@@ -52,6 +52,16 @@ def main():
 
 
 def validate():
+
+
+def appearances():
+    chapters = pd.read_csv("../chapters.csv")
+    chapters = chapters["characters"].apply(lambda row: row.split(","))
+    counter = Counter(chain(*chapters))
+
+    with open("../appearances.json", "w") as f:
+        json.dump(dict(sorted(counter.items(), key=lambda item: -item[1])), f, indent=4, ensure_ascii=False)
+
     chars = pd.read_csv("../full.csv")
     missing = set(chars[
         chars["image"].isna()
@@ -64,4 +74,5 @@ def validate():
 
 if __name__ == "__main__":
     main()
+    appearances()
     validate()
