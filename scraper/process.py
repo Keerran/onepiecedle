@@ -62,17 +62,30 @@ def appearances():
     with open("../appearances.json", "w") as f:
         json.dump(dict(sorted(counter.items(), key=lambda item: -item[1])), f, indent=4, ensure_ascii=False)
 
+
+def choices():
+    with open("../appearance_choices.txt", "r", encoding="utf-8") as f:
+        appearance = f.read().splitlines(keepends=False)
+    with open("../popular_choices.txt", "r", encoding="utf-8") as f:
+        popular = f.read().splitlines(keepends=False)
     chars = pd.read_csv("../full.csv")
-    missing = set(chars[
-        chars["image"].isna()
-        | chars["manga_debut"].isna()
-    ]["name"])
+
+    names = set(appearance) | set(popular)
+    missing = []
+    for name in names:
+        if not (chars["name"] == name).any():
+            missing.append(name)
 
     with open("../missing.txt", "w") as f:
         f.write("\n".join(missing))
+
+    choices = chars[chars["name"].isin(names)]
+
+    choices.to_csv("../choices.csv", index=False)
 
 
 if __name__ == "__main__":
     main()
     appearances()
+    choices()
     validate()
