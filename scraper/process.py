@@ -1,7 +1,9 @@
 import pandas as pd
 import requests
-from itertools import islice
+import json
+from itertools import islice, chain
 from tqdm import tqdm
+from collections import Counter
 
 
 def batched(iterable, n):
@@ -95,7 +97,7 @@ def choices():
 
 
 if __name__ == "__main__":
-    main()
-    appearances()
-    choices()
+    # main()
+    # appearances()
+    # choices()
     validate()
