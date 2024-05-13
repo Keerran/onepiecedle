@@ -1,11 +1,12 @@
 <script lang="ts">
-    import type { Character } from "$lib/server/characters";
+    import type { PageData } from "./$types";
 
+    export let data: PageData;
+
+    let { answer } = data;
     let search = "";
-    let character: Character | null = null;
 
     async function getCharacter() {
-        character = await fetch(`/api/character?name=${search}`).then(r => r.json());
     }
 </script>
 
@@ -14,4 +15,4 @@
     <input type="submit" />
 </form>
 
-{JSON.stringify(character)}
+{JSON.stringify(answer)}
