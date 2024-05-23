@@ -55,9 +55,9 @@ def main():
 
 def validate():
     chars = pd.read_csv("../choices.csv").set_index("name")
-    importants = chars[["image", "manga_debut", "height", "affiliation"]]
+    importants = chars[["gender", "image", "manga_debut", "height", "affiliation"]]
     nulls = importants.isna().any(axis=1)
-    stacked = importants[nulls].stack(future_stack=True).reset_index()
+    stacked = importants[nulls].stack(dropna=False).reset_index()
     stacked.columns = ["name", "key", "value"]
     stacked = stacked[stacked["value"].isna()].drop("value", axis=1)
 
@@ -91,7 +91,11 @@ def choices():
     with open("../missing.txt", "w") as f:
         f.write("\n".join(missing))
 
-    choices = chars[chars["name"].isin(names)]
+    choices = chars[chars["name"].isin(names)].copy()
+
+    # I can assume that all the missing choices are male
+    # because I've covered all the female characters
+    choices["gender"] = choices["gender"].fillna("Male")
 
     choices.to_csv("../choices.csv", index=False)
 

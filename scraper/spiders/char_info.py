@@ -24,11 +24,38 @@ class CharInfoSpider(scrapy.Spider):
         def extract_aside(source: str, subquery="//div"):
             return extract(f'//aside//*[@data-source="{source}"]{subquery}//text()')
 
+        def has_category(category: str):
+            return response.css(".page-header__categories").xpath(f"""
+                .//a[
+                    translate(@href,
+                        'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                        'abcdefghijklmnopqrstuvwxyz'
+                    ) = "/wiki/category:{category.lower()}"
+                ]
+            """)
+
+        def has_categories(categories: list[str]):
+            for category in categories:
+                if has_category(category):
+                    return True
+            return False
+
         name = extract_aside("name", subquery="")
+        male = has_category("Male_characters")
+        female = has_categories([
+            "Female_characters",
+            "Kuja_Pirates",
+            "Queens",
+            "Princesses",
+            "Former_Princesses",
+            "Gorgon_Sisters",
+            "Kunoichi"
+        ])
         if not name:
             return
         yield {
             "name": name,
+            "gender": male and "Male" or female and "Female" or None,
             **self.parse_debut(extract_aside("first")),
             "affiliation": self.parse_affiliations(extract_aside("affiliation")),
             "origin": re.sub(r"\(.+\)", "", extract_aside("origin")),
