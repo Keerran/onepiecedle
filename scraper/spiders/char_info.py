@@ -36,7 +36,7 @@ class CharInfoSpider(scrapy.Spider):
             "height": self.parse_height(extract_aside("height")),
             "bounty": self.parse_bounty(extract_aside("bounty")),
             "dfname": extract_aside("dfname"),
-            "dftype": extract_aside("dftype").split(" ")[-1],
+            "dftype": extract_aside("dftype").split(" ")[-1].strip("()"),
         }
 
     def parse_debut(self, text: str):
